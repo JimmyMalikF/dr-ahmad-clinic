@@ -1,0 +1,568 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#7c3aed;--purple2:#9d5cff;--purple3:#c4b5fd;
+  --blue:#1d4ed8;--blue2:#3b82f6;--blue3:#93c5fd;
+  --white:#ffffff;--bg:#04060f;--bg2:#080d1a;--bg3:#0d1525;
+  --card:#0f1930;--card2:#111c35;
+  --grad:linear-gradient(135deg,#7c3aed,#1d4ed8);
+  --grad2:linear-gradient(135deg,#9d5cff,#3b82f6);
+  --text:rgba(255,255,255,0.85);--muted:rgba(255,255,255,0.5);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--grad2);z-index:9999;width:0;transition:width .1s}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:998;background:rgba(4,6,15,0.92);backdrop-filter:blur(24px);border-bottom:1px solid rgba(124,58,237,0.18);padding:0 5%}
+.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{width:38px;height:38px;background:var(--grad);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-icon svg{width:20px;height:20px;fill:white}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;color:#fff;line-height:1.2}
+.logo-name span{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:9px;font-weight:500;color:var(--purple3);letter-spacing:2.5px;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{background:var(--grad);color:#fff;padding:9px 22px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .2s,transform .2s;white-space:nowrap}
+.nav-cta:hover{opacity:.85;transform:translateY(-1px);color:#fff}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
+.mob-menu{display:none;position:fixed;top:70px;left:0;right:0;background:rgba(4,6,15,0.98);backdrop-filter:blur(24px);padding:2rem 5%;border-bottom:1px solid rgba(124,58,237,0.2);z-index:997;flex-direction:column;gap:1.25rem}
+.mob-menu a{font-size:15px;font-weight:500;color:var(--muted);text-decoration:none;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06)}
+.mob-menu a:last-child{background:var(--grad);color:#fff;padding:12px;border-radius:8px;text-align:center;border:none;font-weight:700;margin-top:.5rem}
+.mob-menu.open{display:flex}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;overflow:hidden}
+.hero-slides{position:absolute;inset:0}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease}
+.slide.active{opacity:1}
+.slide img{width:100%;height:100%;object-fit:cover}
+.slide .ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(4,6,15,.9) 0%,rgba(8,13,26,.75) 40%,rgba(4,6,15,.5) 100%)}
+.hero-content{position:relative;z-index:2;height:100vh;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 8%;padding-top:70px;max-width:1280px;margin:0 auto}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.5);color:var(--purple3);font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;padding:7px 16px;border-radius:100px;margin-bottom:2rem;width:fit-content;animation:fuUp .7s .1s both}
+.hero-dot{width:6px;height:6px;background:var(--purple2);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,6.5vw,84px);font-weight:700;line-height:1.08;margin-bottom:1.5rem;animation:fuUp .8s .2s both}
+.hero h1 em{font-style:italic;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-p{font-size:clamp(15px,1.8vw,18px);font-weight:300;color:rgba(255,255,255,.7);line-height:1.8;max-width:520px;margin-bottom:2.5rem;animation:fuUp .8s .3s both}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fuUp .8s .4s both}
+.btn-grad{background:var(--grad);color:#fff;padding:14px 32px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s;display:inline-block}
+.btn-grad:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(124,58,237,.45);color:#fff}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.3);padding:13px 32px;border-radius:10px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s;display:inline-block}
+.btn-outline:hover{border-color:var(--purple2);color:var(--purple3)}
+.hero-stats{position:absolute;bottom:0;left:0;right:0;background:rgba(8,13,26,.88);backdrop-filter:blur(20px);border-top:1px solid rgba(124,58,237,.2)}
+.hero-stats-inner{max-width:1280px;margin:0 auto;padding:0 5%;display:flex;justify-content:space-around;flex-wrap:wrap}
+.hstat{padding:1.5rem .5rem;text-align:center;flex:1;min-width:100px}
+.hstat-n{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,40px);font-weight:700;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1}
+.hstat-l{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px}
+.slide-dots{position:absolute;right:3%;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:3}
+.sdot{width:3px;height:20px;background:rgba(255,255,255,.3);border-radius:3px;cursor:pointer;transition:all .3s}
+.sdot.active{background:var(--purple2);height:36px}
+@keyframes fuUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+.sec{padding:clamp(4rem,8vw,7rem) 5%}
+.sec-inner{max-width:1280px;margin:0 auto}
+.s-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.75rem;display:inline-block}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:1rem}
+.s-title em{font-style:italic;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.s-desc{font-size:clamp(14px,1.6vw,16px);font-weight:300;color:var(--muted);line-height:1.85;max-width:560px}
+
+/* ABOUT */
+.about{background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,5rem);align-items:center;margin-top:3.5rem}
+.about-imgs{position:relative;height:500px}
+.ai-main{position:absolute;top:0;left:0;width:72%;height:430px;border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(124,58,237,.25)}
+.ai-main img{width:100%;height:100%;object-fit:cover}
+.ai-sec{position:absolute;bottom:0;right:0;width:50%;height:260px;border-radius:12px;overflow:hidden;border:3px solid var(--bg);box-shadow:0 16px 40px rgba(29,78,216,.3)}
+.ai-sec img{width:100%;height:100%;object-fit:cover}
+.yr-badge{position:absolute;top:48%;left:62%;transform:translate(-50%,-50%);background:var(--grad);width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--bg);z-index:2;box-shadow:0 8px 32px rgba(124,58,237,.5)}
+.yr-badge .n{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:#fff;line-height:1}
+.yr-badge .l{font-size:8px;font-weight:700;color:rgba(255,255,255,.8);letter-spacing:1px;text-transform:uppercase}
+.about-feats{display:grid;grid-template-columns:1fr 1fr;gap:.875rem;margin-top:2rem}
+.af{background:var(--card);border:1px solid rgba(124,58,237,.2);border-radius:12px;padding:1.25rem;transition:all .3s;position:relative;overflow:hidden}
+.af::before{content:'';position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s;border-radius:12px}
+.af:hover::before{opacity:.07}
+.af:hover{border-color:rgba(124,58,237,.5);transform:translateY(-3px);box-shadow:0 12px 32px rgba(124,58,237,.2)}
+.af-ico{font-size:20px;margin-bottom:.6rem;position:relative;z-index:1}
+.af-t{font-size:13px;font-weight:700;color:#fff;position:relative;z-index:1}
+.af-d{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;position:relative;z-index:1}
+
+/* ===SERVICES - PREMIUM CARDS=== */
+.services{background:var(--bg2);position:relative;overflow:hidden}
+.services::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:900px;height:900px;background:radial-gradient(circle,rgba(124,58,237,.06),transparent 65%);pointer-events:none}
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem}
+.srv{background:var(--card);border-radius:20px;padding:2.25rem 2rem;position:relative;overflow:hidden;transition:all .4s;cursor:default;
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.srv::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,58,237,.12),rgba(29,78,216,.08));opacity:0;transition:opacity .4s;border-radius:20px}
+.srv::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--grad2);transform:scaleX(0);transform-origin:left;transition:transform .4s;border-radius:0 0 20px 20px}
+.srv:hover{transform:translateY(-8px);border-color:rgba(124,58,237,.4);box-shadow:0 20px 60px rgba(124,58,237,.25),0 8px 24px rgba(0,0,0,.5)}
+.srv:hover::before{opacity:1}
+.srv:hover::after{transform:scaleX(1)}
+.srv-glow{position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:var(--grad);opacity:.06;transition:opacity .4s}
+.srv:hover .srv-glow{opacity:.14}
+.srv-num{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:rgba(124,58,237,.15);line-height:1;margin-bottom:.75rem;position:relative;z-index:1;transition:color .4s}
+.srv:hover .srv-num{color:rgba(124,58,237,.3)}
+.srv-ico{width:54px;height:54px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(29,78,216,.2));border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;position:relative;z-index:1;transition:all .4s;border:1px solid rgba(124,58,237,.25)}
+.srv:hover .srv-ico{background:var(--grad);border-color:transparent;box-shadow:0 8px 24px rgba(124,58,237,.5)}
+.srv-ico svg{width:24px;height:24px;fill:var(--purple3);transition:fill .4s}
+.srv:hover .srv-ico svg{fill:#fff}
+.srv-t{font-size:18px;font-weight:700;color:#fff;margin-bottom:.75rem;position:relative;z-index:1}
+.srv-d{font-size:13px;color:var(--muted);line-height:1.7;position:relative;z-index:1}
+.srv-arrow{position:absolute;bottom:1.5rem;right:1.5rem;width:32px;height:32px;border-radius:50%;background:rgba(124,58,237,.15);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateX(-6px);transition:all .4s;z-index:1}
+.srv:hover .srv-arrow{opacity:1;transform:translateX(0)}
+.srv-arrow svg{width:14px;height:14px;fill:var(--purple3)}
+
+/* DOCTOR */
+.doctor{background:var(--bg);position:relative;overflow:hidden}
+.doc-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(2rem,5vw,5rem);align-items:center;margin-top:3.5rem}
+.doc-img-wrap{position:relative}
+.doc-frame{background:var(--grad);padding:2px;border-radius:20px;box-shadow:0 32px 80px rgba(124,58,237,.35)}
+.doc-img{border-radius:19px;overflow:hidden;height:520px}
+.doc-img img{width:100%;height:100%;object-fit:cover}
+.doc-corner{position:absolute;bottom:-16px;right:-16px;width:80px;height:80px;border-right:2px solid var(--purple2);border-bottom:2px solid var(--purple2);border-radius:0 0 4px 0}
+.doc-corner2{position:absolute;top:-16px;left:-16px;width:80px;height:80px;border-left:2px solid var(--blue2);border-top:2px solid var(--blue2);border-radius:4px 0 0 0}
+.exp-badge{position:absolute;top:20px;right:-20px;background:var(--grad);border-radius:16px;padding:1rem 1.25rem;text-align:center;box-shadow:0 12px 40px rgba(124,58,237,.5);border:3px solid var(--bg)}
+.exp-badge .n{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:#fff;display:block;line-height:1}
+.exp-badge .l{font-size:10px;color:rgba(255,255,255,.8);margin-top:3px;letter-spacing:1px;font-weight:500}
+.doc-name{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,3.5vw,44px);font-weight:700;color:#fff;margin-bottom:.4rem;line-height:1.1}
+.doc-title{font-size:12px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.75rem}
+.doc-bio{font-size:14px;font-weight:300;color:var(--muted);line-height:1.9;margin-bottom:2rem}
+.creds{display:flex;flex-direction:column;gap:.875rem;margin-bottom:2.5rem}
+.cred{display:flex;align-items:center;gap:1rem}
+.cred-dot{width:8px;height:8px;background:var(--grad);border-radius:50%;flex-shrink:0;box-shadow:0 0 8px rgba(124,58,237,.6)}
+.cred-t{font-size:13px;color:rgba(255,255,255,.75)}
+
+/* GALLERY */
+.gallery{background:var(--bg2);padding:clamp(4rem,8vw,7rem) 0}
+.gal-head{text-align:center;padding:0 5%;margin-bottom:3rem}
+.gal-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:200px;gap:6px;padding:0 5%;max-width:1280px;margin:0 auto}
+.gi{overflow:hidden;border-radius:12px;position:relative;cursor:pointer}
+.gi:nth-child(1){grid-row:span 2}
+.gi:nth-child(4){grid-row:span 2}
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.gi:hover img{transform:scale(1.08)}
+.gi-ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(4,6,15,.85));opacity:0;transition:opacity .4s;border-radius:12px;display:flex;align-items:flex-end;padding:1.25rem}
+.gi:hover .gi-ov{opacity:1}
+.gi-cap{font-size:12px;font-weight:600;color:#fff;letter-spacing:1.5px;text-transform:uppercase}
+
+/* ===TESTIMONIALS - PREMIUM CARDS=== */
+.testimonials{background:var(--bg);padding:clamp(4rem,8vw,7rem) 5%;position:relative;overflow:hidden}
+.testimonials::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:800px;height:400px;background:radial-gradient(ellipse,rgba(29,78,216,.07),transparent 70%);pointer-events:none}
+.testi-head{text-align:center;margin-bottom:4rem}
+.testi-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.tc{background:var(--card);border-radius:20px;padding:2rem;position:relative;overflow:hidden;transition:all .4s;
+  border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.tc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(124,58,237,.6),rgba(29,78,216,.6),transparent);opacity:0;transition:opacity .4s}
+.tc:hover{transform:translateY(-6px);border-color:rgba(124,58,237,.35);box-shadow:0 24px 64px rgba(124,58,237,.2),0 8px 24px rgba(0,0,0,.5)}
+.tc:hover::before{opacity:1}
+.tc-glow{position:absolute;top:-60px;right:-60px;width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,rgba(124,58,237,.15),rgba(29,78,216,.1));pointer-events:none}
+.tc-quote{position:absolute;top:1.25rem;right:1.5rem;font-family:'Cormorant Garamond',serif;font-size:80px;color:rgba(124,58,237,.1);line-height:1}
+.tc-stars{display:flex;gap:3px;margin-bottom:1.25rem;position:relative;z-index:1}
+.tc-star{font-size:14px;background:var(--grad2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tc-text{font-size:13px;font-weight:300;color:rgba(255,255,255,.75);line-height:1.85;margin-bottom:1.75rem;font-style:italic;position:relative;z-index:1}
+.tc-author{display:flex;align-items:center;gap:12px;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.07);position:relative;z-index:1}
+.tc-avatar{width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box, var(--grad) border-box}
+.tc-avatar img{width:100%;height:100%;object-fit:cover}
+.tc-name{font-size:14px;font-weight:700;color:#fff}
+.tc-role{font-size:11px;color:var(--purple3);margin-top:2px;font-weight:500}
+
+/* APPOINTMENT */
+.appointment{background:var(--bg2);padding:clamp(4rem,8vw,7rem) 5%}
+.appt-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1.3fr;gap:clamp(2rem,5vw,5rem);align-items:start;margin-top:3.5rem}
+.appt-feat{display:flex;gap:1.25rem;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.appt-feat:last-of-type{border:none;margin:0;padding:0}
+.af2-ico{width:46px;height:46px;background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(29,78,216,.15));border:1px solid rgba(124,58,237,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.af2-ico svg{width:20px;height:20px;fill:var(--purple3)}
+.af2-t{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px}
+.af2-d{font-size:13px;color:var(--muted);line-height:1.6}
+.form-box{background:var(--card);border:1px solid rgba(124,58,237,.2);border-radius:20px;padding:2.5rem;box-shadow:0 24px 64px rgba(124,58,237,.12)}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:2rem}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fg{margin-bottom:1.125rem}
+.fg label{display:block;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:.5rem}
+.fg input,.fg select,.fg textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;padding:12px 15px;outline:none;transition:border-color .3s,background .3s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(124,58,237,.6);background:rgba(124,58,237,.05)}
+.fg select option{background:#0f1930}
+.fg textarea{min-height:90px;resize:vertical}
+.form-btn{width:100%;padding:14px;background:var(--grad);color:#fff;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .3s,transform .2s;margin-top:.5rem;letter-spacing:.3px}
+.form-btn:hover{opacity:.88;transform:translateY(-1px)}
+.form-ok{display:none;background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.4);border-radius:10px;padding:1rem;text-align:center;color:var(--purple3);font-size:14px;margin-top:1rem}
+
+/* CONTACT */
+.contact{background:var(--bg);padding:clamp(4rem,8vw,7rem) 5%}
+.contact-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);margin-top:3.5rem}
+.ci{display:flex;gap:1.25rem;margin-bottom:2.25rem;align-items:flex-start}
+.ci-icon{width:46px;height:46px;background:var(--grad);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 20px rgba(124,58,237,.35)}
+.ci-icon svg{width:20px;height:20px;fill:#fff}
+.ci-label{font-size:10px;font-weight:700;color:var(--purple3);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.ci-val{font-size:14px;color:rgba(255,255,255,.8);line-height:1.6}
+.hrs-card{background:var(--card);border:1px solid rgba(124,58,237,.18);border-radius:16px;padding:2rem}
+.hrs-title{font-size:11px;font-weight:700;color:var(--purple3);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:1.5rem}
+.hr{display:flex;justify-content:space-between;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px}
+.hr:last-child{border:none}
+.hr-day{color:var(--muted)}
+.hr-time{color:#fff;font-weight:600}
+.hr-time.off{color:#f87171}
+.map-card{background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(29,78,216,.06));border:1px solid rgba(124,58,237,.18);border-radius:16px;height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.875rem;margin-top:2rem}
+.map-ico{width:52px;height:52px;background:var(--grad);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(124,58,237,.45)}
+.map-ico svg{width:24px;height:24px;fill:#fff}
+.map-card-t{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:#fff}
+.map-card-a{font-size:13px;color:var(--muted)}
+.map-btn{background:var(--grad);color:#fff;padding:10px 28px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:opacity .2s;margin-top:.25rem}
+.map-btn:hover{opacity:.85;color:#fff}
+
+/* FOOTER */
+footer{background:#020509;padding:clamp(3rem,6vw,5rem) 5% 2rem;border-top:1px solid rgba(124,58,237,.12)}
+.foot-inner{max-width:1280px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:clamp(1.5rem,3vw,3rem);margin-bottom:3rem}
+.foot-brand{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#fff}
+.foot-sub{font-size:9px;font-weight:600;color:var(--purple3);letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem}
+.foot-about{font-size:13px;font-weight:300;color:rgba(255,255,255,.4);line-height:1.8}
+.foot-col-t{font-size:10px;font-weight:700;color:var(--purple3);letter-spacing:2px;text-transform:uppercase;margin-bottom:1.25rem}
+.foot-links{list-style:none;display:flex;flex-direction:column;gap:.625rem}
+.foot-links a{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;font-weight:300;transition:color .2s}
+.foot-links a:hover{color:var(--purple3)}
+.foot-div{height:1px;background:rgba(255,255,255,.06);margin-bottom:1.75rem}
+.foot-bot{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:rgba(255,255,255,.25);flex-wrap:wrap;gap:.5rem}
+
+/* ===RESPONSIVE=== */
+@media(max-width:1024px){
+  .srv-grid{grid-template-columns:repeat(2,1fr)}
+  .testi-grid{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:2rem}
+  .about-grid{grid-template-columns:1fr}
+  .doc-grid{grid-template-columns:1fr}
+  .doc-img-wrap{max-width:480px;margin:0 auto}
+  .appt-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .gal-grid{grid-template-columns:repeat(2,1fr)}
+  .gi:nth-child(4){grid-row:span 1}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero-content{padding:0 5%;padding-top:70px}
+  .hero h1{font-size:clamp(38px,8vw,52px)}
+  .hero-p{font-size:14px;max-width:100%}
+  .hero-btns{gap:.75rem}
+  .btn-grad,.btn-outline{padding:12px 24px;font-size:13px}
+  .slide-dots{display:none}
+  .hstat{padding:1rem .25rem;min-width:80px}
+  .srv-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .frow{grid-template-columns:1fr}
+  .about-imgs{height:360px}
+  .ai-main{width:80%;height:320px}
+  .ai-sec{width:55%;height:200px}
+  .foot-grid{grid-template-columns:1fr}
+  .foot-bot{flex-direction:column;text-align:center}
+  .gal-grid{grid-template-columns:1fr 1fr}
+  .gi:nth-child(1){grid-row:span 1}
+  .exp-badge{right:-10px;top:10px}
+}
+@media(max-width:480px){
+  .sec{padding:3.5rem 4%}
+  .testimonials,.appointment,.contact,.gallery{padding:3.5rem 4%}
+  .gal-grid{padding:0 4%}
+  .hero-stats-inner{gap:0}
+  .hstat{min-width:70px;padding:.875rem .2rem}
+  .hstat-l{font-size:8px;letter-spacing:.5px}
+  .about-feats{grid-template-columns:1fr}
+  .hero-badge{font-size:9px;padding:6px 12px}
+}
+</style>
+
+<div id="prog"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">
+      <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+      <div class="logo-name">Dr. Ahmed<span>Orthopedic Clinic</span></div>
+    </div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#doctor">Doctor</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact">Contact</a>
+      <a href="#appointment" class="nav-cta">Book Now</a>
+    </div>
+    <div class="hamburger" id="ham" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#doctor" onclick="closeMenu()">Doctor</a>
+  <a href="#gallery" onclick="closeMenu()">Gallery</a>
+  <a href="#testimonials" onclick="closeMenu()">Reviews</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="#appointment" onclick="closeMenu()">Book Appointment</a>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="home">
+  <div class="hero-slides" id="slides">
+    <div class="slide active"><img src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=1600&q=80" alt="Surgery"><div class="ov"></div></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1600&q=80" alt="Doctor"><div class="ov"></div></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=1600&q=80" alt="Care"><div class="ov"></div></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=1600&q=80" alt="Spine"><div class="ov"></div></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="hero-dot"></span>Islamabad's Premier Orthopedic Clinic</div>
+    <h1 id="htitle">Restoring <em>Motion.</em><br>Rebuilding Lives.</h1>
+    <p class="hero-p" id="hdesc">Expert orthopedic care for bone, joint & spine — combining 20 years of surgical excellence with the latest minimally invasive techniques.</p>
+    <div class="hero-btns">
+      <a href="#appointment" class="btn-grad">Book Appointment</a>
+      <a href="#services" class="btn-outline">Our Services</a>
+    </div>
+  </div>
+  <div class="slide-dots" id="sdots">
+    <div class="sdot active" onclick="goSlide(0)"></div>
+    <div class="sdot" onclick="goSlide(1)"></div>
+    <div class="sdot" onclick="goSlide(2)"></div>
+    <div class="sdot" onclick="goSlide(3)"></div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stats-inner">
+      <div class="hstat"><div class="hstat-n">20+</div><div class="hstat-l">Years Exp.</div></div>
+      <div class="hstat"><div class="hstat-n">8,500+</div><div class="hstat-l">Surgeries</div></div>
+      <div class="hstat"><div class="hstat-n">98%</div><div class="hstat-l">Success Rate</div></div>
+      <div class="hstat"><div class="hstat-n">15+</div><div class="hstat-l">Awards</div></div>
+      <div class="hstat"><div class="hstat-n">3</div><div class="hstat-l">Fellowships</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="sec about" id="about">
+  <div class="sec-inner">
+    <div class="about-grid">
+      <div class="about-imgs">
+        <div class="ai-main"><img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=800&q=80" alt="Clinic" loading="lazy"></div>
+        <div class="ai-sec"><img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=600&q=80" alt="Doctor" loading="lazy"></div>
+        <div class="yr-badge"><span class="n">20+</span><span class="l">Years</span></div>
+      </div>
+      <div>
+        <div class="s-label">About Our Clinic</div>
+        <h2 class="s-title">Where Precision<br>Meets <em>Compassion</em></h2>
+        <p class="s-desc" style="margin-bottom:1.5rem">Dr. Ahmed Orthopedic Clinic has been at the forefront of musculoskeletal medicine for over two decades — combining world-class surgical expertise with a patient-first philosophy.</p>
+        <div class="about-feats">
+          <div class="af"><div class="af-ico">⚕</div><div class="af-t">PMDC Certified</div><div class="af-d">Fully licensed & accredited</div></div>
+          <div class="af"><div class="af-ico">🔬</div><div class="af-t">Advanced Diagnostics</div><div class="af-d">Digital X-Ray, MRI & Ultrasound</div></div>
+          <div class="af"><div class="af-ico">✦</div><div class="af-t">Minimally Invasive</div><div class="af-d">Arthroscopic procedures</div></div>
+          <div class="af"><div class="af-ico">♻</div><div class="af-t">Complete Rehab</div><div class="af-d">In-house physiotherapy</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="sec services" id="services">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:1rem"><div class="s-label">What We Treat</div></div>
+    <h2 class="s-title" style="text-align:center">Specialized <em>Services</em></h2>
+    <p class="s-desc" style="text-align:center;margin:0 auto 0">Comprehensive orthopedic care using the most advanced surgical techniques available today.</p>
+    <div class="srv-grid">
+      <div class="srv"><div class="srv-glow"></div><div class="srv-num">01</div><div class="srv-ico"><svg viewBox="0 0 24 24"><path d="M7.5 5.6L10 7 8.6 4.5 10 2 7.5 3.4 5 2l1.4 2.5L5 7zm12 9.8L17 14l1.4 2.5L17 19l2.5-1.4L22 19l-1.4-2.5L22 14zM22 2l-2.5 1.4L17 2l1.4 2.5L17 7l2.5-1.4L22 7l-1.4-2.5zm-7.63 5.29a1 1 0 0 0-1.41 0L1.29 18.96a1 1 0 0 0 0 1.41l2.34 2.34a1 1 0 0 0 1.41 0L16.7 11.05a1 1 0 0 0 0-1.41l-2.33-2.35zm-1.03 5.49l-2.12-2.12 2.44-2.44 2.12 2.12-2.44 2.44z"/></svg></div><div class="srv-t">Joint Replacement</div><p class="srv-d">Total knee & hip replacement using cutting-edge prosthetics for permanent pain relief and full mobility restoration.</p><div class="srv-arrow"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="srv"><div class="srv-glow"></div><div class="srv-num">02</div><div class="srv-ico"><svg viewBox="0 0 24 24"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></div><div class="srv-t">Sports Injuries</div><p class="srv-d">Expert management of ACL tears, fractures, dislocations & overuse injuries in athletes and active individuals.</p><div class="srv-arrow"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="srv"><div class="srv-glow"></div><div class="srv-num">03</div><div class="srv-ico"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93V18c0-.55-.45-1-1-1s-1 .45-1 1v1.93C7.06 19.48 4.52 16.94 4.07 14H6c.55 0 1-.45 1-1s-.45-1-1-1H4.07C4.52 9.06 7.06 6.52 10 6.07V8c0 .55.45 1 1 1s1-.45 1-1V6.07c2.94.45 5.48 2.99 5.93 5.93H16c-.55 0-1 .45-1 1s.45 1 1 1h1.93c-.45 2.94-2.99 5.48-5.93 5.93z"/></svg></div><div class="srv-t">Spine Disorders</div><p class="srv-d">Treatment of herniated discs, spinal stenosis & chronic back pain through surgical and non-surgical methods.</p><div class="srv-arrow"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="srv"><div class="srv-glow"></div><div class="srv-num">04</div><div class="srv-ico"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM10 17l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><div class="srv-t">Arthroscopy</div><p class="srv-d">Minimally invasive keyhole surgery for diagnosing and treating joint problems in the knee, shoulder, hip & ankle.</p><div class="srv-arrow"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="srv"><div class="srv-glow"></div><div class="srv-num">05</div><div class="srv-ico"><svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg></div><div class="srv-t">Fracture Management</div><p class="srv-d">State-of-the-art fixation using plates, nails & external fixators for optimal healing and recovery outcomes.</p><div class="srv-arrow"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="srv"><div class="srv-glow"></div><div class="srv-num">06</div><div class="srv-ico"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div><div class="srv-t">Physiotherapy & Rehab</div><p class="srv-d">Customized rehabilitation programs restoring strength, flexibility and function after surgery or injury.</p><div class="srv-arrow"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTOR -->
+<section class="sec doctor" id="doctor">
+  <div class="sec-inner">
+    <div class="s-label">Meet the Specialist</div>
+    <div class="doc-grid">
+      <div class="doc-img-wrap">
+        <div class="doc-corner"></div><div class="doc-corner2"></div>
+        <div class="doc-frame"><div class="doc-img"><img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700&q=80" alt="Dr. Ahmed" loading="lazy"></div></div>
+        <div class="exp-badge"><span class="n">20+</span><span class="l">Yrs Exp.</span></div>
+      </div>
+      <div>
+        <div class="s-label">Dr. Ahmed Khan</div>
+        <div class="doc-name">Orthopedic &<br>Spine Surgeon</div>
+        <div class="doc-title">MBBS · FCPS · Fellowship in Spine Surgery (UK)</div>
+        <p class="doc-bio">Dr. Ahmed Khan is one of Pakistan's most respected orthopedic surgeons with over two decades of clinical excellence. Trained at King Edward Medical University and completing a prestigious Fellowship in Spine Surgery in the United Kingdom, he brings world-class expertise to every patient.</p>
+        <div class="creds">
+          <div class="cred"><div class="cred-dot"></div><div class="cred-t">MBBS — King Edward Medical University, Lahore</div></div>
+          <div class="cred"><div class="cred-dot"></div><div class="cred-t">FCPS Orthopedics — College of Physicians & Surgeons Pakistan</div></div>
+          <div class="cred"><div class="cred-dot"></div><div class="cred-t">Spine Surgery Fellowship — Royal Orthopaedic Hospital, Birmingham UK</div></div>
+          <div class="cred"><div class="cred-dot"></div><div class="cred-t">PMDC Registered — No. 12345-P</div></div>
+        </div>
+        <a href="#appointment" class="btn-grad">Schedule a Consultation</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="gallery" id="gallery">
+  <div class="gal-head">
+    <div class="s-label">Our Facility</div>
+    <h2 class="s-title">Clinic <em>Gallery</em></h2>
+  </div>
+  <div class="gal-grid">
+    <div class="gi"><img src="https://images.unsplash.com/photo-1581595220892-b0739db3ba8c?w=600&q=80" alt="OR" loading="lazy"><div class="gi-ov"><div class="gi-cap">Operating Theater</div></div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=500&q=80" alt="MRI" loading="lazy"><div class="gi-ov"><div class="gi-cap">MRI Suite</div></div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=500&q=80" alt="Consult" loading="lazy"><div class="gi-ov"><div class="gi-cap">Consultation Room</div></div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?w=600&q=80" alt="Spine" loading="lazy"><div class="gi-ov"><div class="gi-cap">Spine Procedure</div></div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=500&q=80" alt="Physio" loading="lazy"><div class="gi-ov"><div class="gi-cap">Physiotherapy</div></div></div>
+    <div class="gi"><img src="https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=500&q=80" alt="Recovery" loading="lazy"><div class="gi-ov"><div class="gi-cap">Recovery Ward</div></div></div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials" id="testimonials">
+  <div class="testi-head">
+    <div class="s-label">Patient Stories</div>
+    <h2 class="s-title">What Our Patients <em>Say</em></h2>
+  </div>
+  <div class="testi-grid">
+    <div class="tc"><div class="tc-glow"></div><div class="tc-quote">"</div><div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div><p class="tc-text">"Dr. Ahmed performed my knee replacement and the results are nothing short of miraculous. After years of debilitating pain, I can now walk freely. The team was professional and caring throughout my entire recovery."</p><div class="tc-author"><div class="tc-avatar"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=70" alt="" loading="lazy"></div><div><div class="tc-name">Muhammad Tariq</div><div class="tc-role">Knee Replacement · Islamabad</div></div></div></div>
+    <div class="tc"><div class="tc-glow"></div><div class="tc-quote">"</div><div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div><p class="tc-text">"I suffered a torn ACL and Dr. Ahmed's arthroscopic surgery got me back on the field in 6 months. His expertise and the rehab program here is truly world-class. I can't thank him enough!"</p><div class="tc-author"><div class="tc-avatar"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=70" alt="" loading="lazy"></div><div><div class="tc-name">Ali Hassan</div><div class="tc-role">ACL Repair · Rawalpindi</div></div></div></div>
+    <div class="tc"><div class="tc-glow"></div><div class="tc-quote">"</div><div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div><p class="tc-text">"Five years of chronic back pain ended after Dr. Ahmed's spine surgery. The recovery was smooth and I can now live a completely normal life. This clinic genuinely changed my life forever."</p><div class="tc-author"><div class="tc-avatar"><img src="https://images.unsplash.com/photo-1494790108755-2616b612b9b3?w=100&q=70" alt="" loading="lazy"></div><div><div class="tc-name">Fatima Noor</div><div class="tc-role">Spine Surgery · Islamabad</div></div></div></div>
+    <div class="tc"><div class="tc-glow"></div><div class="tc-quote">"</div><div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div><p class="tc-text">"The clinic is incredibly modern and the staff are so warm. Dr. Ahmed explained everything before my hip replacement. I felt completely safe and cared for throughout the whole process."</p><div class="tc-author"><div class="tc-avatar"><img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=70" alt="" loading="lazy"></div><div><div class="tc-name">Shahida Malik</div><div class="tc-role">Hip Replacement · Lahore</div></div></div></div>
+    <div class="tc"><div class="tc-glow"></div><div class="tc-quote">"</div><div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div><p class="tc-text">"Dr. Ahmed treated my son's complex fracture with utmost precision. The on-site digital X-ray was convenient and the follow-up physiotherapy helped him recover completely in record time."</p><div class="tc-author"><div class="tc-avatar"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=70" alt="" loading="lazy"></div><div><div class="tc-name">Kamran Ahmed</div><div class="tc-role">Fracture Management · Islamabad</div></div></div></div>
+    <div class="tc"><div class="tc-glow"></div><div class="tc-quote">"</div><div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div><p class="tc-text">"My rotator cuff surgery was minimally invasive with a faster recovery and minimal scarring. Dr. Ahmed's calm demeanor and clear explanations made me feel completely at ease throughout."</p><div class="tc-author"><div class="tc-avatar"><img src="https://images.unsplash.com/photo-1546961342-ea5f62d5a27b?w=100&q=70" alt="" loading="lazy"></div><div><div class="tc-name">Zara Khan</div><div class="tc-role">Shoulder Surgery · Rawalpindi</div></div></div></div>
+  </div>
+</div>
+
+<!-- APPOINTMENT -->
+<section class="appointment" id="appointment">
+  <div class="appt-grid">
+    <div>
+      <div class="s-label">Get Started</div>
+      <h2 class="s-title">Book Your <em>Appointment</em></h2>
+      <div style="width:40px;height:3px;background:var(--grad);border-radius:2px;margin:1.5rem 0"></div>
+      <p class="s-desc" style="margin-bottom:2.5rem">Take the first step toward a pain-free life. Same-week appointments available for urgent cases.</p>
+      <div class="appt-feat"><div class="af2-ico"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div><div><div class="af2-t">Fully Confidential</div><div class="af2-d">All patient info kept strictly private and secure.</div></div></div>
+      <div class="appt-feat"><div class="af2-ico"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div><div><div class="af2-t">Flexible Hours</div><div class="af2-d">Morning and evening slots, Monday through Saturday.</div></div></div>
+      <div class="appt-feat"><div class="af2-ico"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div><div><div class="af2-t">Emergency Line</div><div class="af2-d">24/7 urgent care line for acute injuries.</div></div></div>
+    </div>
+    <div>
+      <div class="form-box">
+        <div class="form-title">Request an Appointment</div>
+        <div class="frow">
+          <div class="fg"><label>Full Name</label><input type="text" placeholder="Your full name" id="fn"></div>
+          <div class="fg"><label>Phone</label><input type="text" placeholder="+92 300 000 0000" id="fp"></div>
+        </div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="your@email.com" id="fe"></div>
+        <div class="frow">
+          <div class="fg"><label>Service</label><select id="fs"><option value="">Select service...</option><option>Joint Replacement</option><option>Sports Injury</option><option>Spine Treatment</option><option>Arthroscopy</option><option>Fracture Management</option><option>Physiotherapy</option><option>Consultation</option></select></div>
+          <div class="fg"><label>Preferred Date</label><input type="date" id="fd"></div>
+        </div>
+        <div class="fg"><label>Description</label><textarea placeholder="Describe your symptoms briefly..." id="fm"></textarea></div>
+        <button class="form-btn" onclick="submitForm()">Confirm Appointment Request</button>
+        <div class="form-ok" id="fok">Your request is received! We'll contact you within 24 hours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="sec-inner" style="max-width:1280px;margin:0 auto">
+    <div class="s-label">Find Us</div>
+    <h2 class="s-title">Contact & <em>Location</em></h2>
+    <div class="contact-grid">
+      <div>
+        <div class="ci"><div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div><div><div class="ci-label">Address</div><div class="ci-val">House 45, Street 7, F-8/2<br>Islamabad, Pakistan</div></div></div>
+        <div class="ci"><div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div><div><div class="ci-label">Phone</div><div class="ci-val">+92 51 000 0000<br>+92 300 000 0000 (Urgent)</div></div></div>
+        <div class="ci"><div class="ci-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div><div><div class="ci-label">Email</div><div class="ci-val">info@drahmedortho.pk</div></div></div>
+        <div class="hrs-card">
+          <div class="hrs-title">Clinic Hours</div>
+          <div class="hr"><span class="hr-day">Monday – Wednesday</span><span class="hr-time">9:00 AM – 5:00 PM</span></div>
+          <div class="hr"><span class="hr-day">Thursday – Friday</span><span class="hr-time">9:00 AM – 7:00 PM</span></div>
+          <div class="hr"><span class="hr-day">Saturday</span><span class="hr-time">10:00 AM – 3:00 PM</span></div>
+          <div class="hr"><span class="hr-day">Sunday</span><span class="hr-time off">Closed</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="map-card">
+          <div class="map-ico"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+          <div class="map-card-t">Dr. Ahmed Orthopedic Clinic</div>
+          <div class="map-card-a">F-8/2, Islamabad · Pakistan</div>
+          <a href="#" class="map-btn">Get Directions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div><div class="foot-brand">Dr. Ahmed Orthopedic Clinic</div><div class="foot-sub">Excellence in Orthopedic Care</div><p class="foot-about">Providing compassionate, world-class orthopedic care in Islamabad. Our mission is to restore mobility and improve quality of life for every patient.</p></div>
+      <div><div class="foot-col-t">Services</div><ul class="foot-links"><li><a href="#services">Joint Replacement</a></li><li><a href="#services">Sports Injuries</a></li><li><a href="#services">Spine Disorders</a></li><li><a href="#services">Arthroscopy</a></li><li><a href="#services">Physiotherapy</a></li></ul></div>
+      <div><div class="foot-col-t">Quick Links</div><ul class="foot-links"><li><a href="#about">About</a></li><li><a href="#doctor">Dr. Ahmed</a></li><li><a href="#testimonials">Reviews</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#appointment">Book Now</a></li></ul></div>
+      <div><div class="foot-col-t">Contact</div><ul class="foot-links"><li><a href="#">+92 51 000 0000</a></li><li><a href="#">+92 300 000 0000</a></li><li><a href="#">info@drahmedortho.pk</a></li><li><a href="#">F-8/2, Islamabad</a></li></ul></div>
+    </div>
+    <div class="foot-div"></div>
+    <div class="foot-bot"><div>© 2025 Dr. Ahmed Orthopedic Clinic. All rights reserved.</div><div>PMDC Reg. No. 12345-P · Privacy Policy · Terms of Use</div></div>
+  </div>
+</footer>
+
+<script>
+let cur=0;
+const sls=document.querySelectorAll('.slide');
+const dts=document.querySelectorAll('.sdot');
+const htxts=[
+  {t:'Restoring <em>Motion.</em><br>Rebuilding Lives.',d:'Expert orthopedic care for bone, joint & spine — combining 20 years of surgical excellence with the latest minimally invasive techniques.'},
+  {t:'Advanced <em>Surgical</em><br>Excellence.',d:'State-of-the-art arthroscopic and joint replacement surgeries with precision, compassion and world-class outcomes.'},
+  {t:'Your Journey to <em>Pain-Free</em><br>Living Starts Here.',d:'Comprehensive musculoskeletal care tailored to your needs — from diagnosis to full recovery.'},
+  {t:'Trusted by <em>8,500+</em><br>Patients.',d:'Decades of surgical excellence, international training and commitment to the highest standards of orthopedic care.'}
+];
+function goSlide(n){
+  sls[cur].classList.remove('active');dts[cur].classList.remove('active');
+  cur=n;sls[cur].classList.add('active');dts[cur].classList.add('active');
+  const ht=document.getElementById('htitle'),hd=document.getElementById('hdesc');
+  ht.style.opacity='0';hd.style.opacity='0';
+  setTimeout(()=>{ht.innerHTML=htxts[n].t;hd.textContent=htxts[n].d;ht.style.transition='opacity .7s';hd.style.transition='opacity .7s';ht.style.opacity='1';hd.style.opacity='1';},300);
+}
+setInterval(()=>goSlide((cur+1)%4),5000);
+
+function toggleMenu(){const m=document.getElementById('mobMenu');m.classList.toggle('open')}
+function closeMenu(){document.getElementById('mobMenu').classList.remove('open')}
+
+window.addEventListener('scroll',()=>{
+  const p=document.getElementById('prog');
+  const d=document.documentElement;
+  p.style.width=Math.round((d.scrollTop/(d.scrollHeight-d.clientHeight))*100)+'%';
+});
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}});
+},{threshold:0.08});
+document.querySelectorAll('.srv,.tc,.af,.cred,.about-imgs,.doc-img-wrap').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(28px)';el.style.transition='opacity .65s ease,transform .65s ease';
+  obs.observe(el);
+});
+function submitForm(){
+  const n=document.getElementById('fn').value,p=document.getElementById('fp').value,s=document.getElementById('fs').value;
+  if(!n||!p||!s)return;
+  document.getElementById('fok').style.display='block';
+  ['fn','fp','fe','fs','fd','fm'].forEach(id=>document.getElementById(id).value='');
+}
+</script>
